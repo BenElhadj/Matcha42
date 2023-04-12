@@ -75,8 +75,12 @@
 
 <script>
 import { mapActions } from "vuex";
-import { Button, InputText, Password, Checkbox, Dialog } from 'primevue';
-
+//import { Button, InputText, Password, Checkbox, Dialog } from 'primevue';
+import Button from "primevue/button";
+import InputText from "primevue/inputtext"
+import Password from "primevue/password"
+import Checkbox from "primevue/checkbox"
+import Dialog from "primevue/dialog"
 import {
   registerUser,
   loginUser,
