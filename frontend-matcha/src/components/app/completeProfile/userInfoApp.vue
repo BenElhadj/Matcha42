@@ -12,18 +12,16 @@
             </v-form>
         </v-col>
         <v-col cols="12" xl="4" lg="4" md="4" v-if="path">
-            <center>
-                <v-avatar size="250" class="pink darken-3 mt-6" align="center" justify="center">
-                    <img :src="path" />
-                </v-avatar>                
-            </center>
+        <v-avatar size="250" class="pink darken-3 mt-6" justify="center">
+            <img :src="path" />
+        </v-avatar>                
         </v-col>
         <v-col cols="12" xl="8" lg="8" md="8" v-if="v == `valid`">
             <v-form v-model="valid">
                 <v-card color="accent">
                     <v-row style="margin: 4vh 0 0 0">
                         <v-col>
-                            <v-date-picker min="1925" max="2004" color="primary" v-model="date" width="290" class="ml-6 my-12"></v-date-picker>
+                            <!--<v-date-picker min="1925" max="2004" color="primary" v-model="date" width="290" class="ml-6 my-12"></v-date-picker>-->
                         </v-col>
                         <v-col style="margin: 4vh 0 0 0">
                             <v-select v-model="complete.gender" :items="Gender" label="Gender" outlined style="margin: 0 1vh 0 1vh" :rules="GenderRules"></v-select>
@@ -39,7 +37,9 @@
                         <v-textarea v-model="complete.bio" label="Bio" outlined style="margin: 0 1vh 0 1vh" :rules="BioRules"></v-textarea>
                     </v-row>
                     <v-row  style="margin: 2vh 0 0 0" v-if="valid">
-                        <n-link to="/profile"><v-btn color="primary" @click="completed" width="100%" style="margin: 0 1vh 1vh 1vh" :disabled="!valid">Save</v-btn></n-link>
+                      <router-link to="/profile">
+                        <v-btn color="primary" @click="completed" width="100%" style="margin: 0 1vh 1vh 1vh" :disabled="!valid">Save</v-btn>
+                      </router-link>
                     </v-row>                    
                 </v-card>
 
