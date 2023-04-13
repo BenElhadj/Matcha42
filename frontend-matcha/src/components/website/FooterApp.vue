@@ -10,16 +10,16 @@
         </div>
         <div class="categorie-container">
           <h2 class="big-txt">Follow us</h2>
-          <a target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/KeakrApp" class="small-txt decoration-none" >Facebook</a>
-          <a target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/keakrapp" class="small-txt decoration-none" >Instagram</a>
-          <a target="_blank" rel="noopener noreferrer" href="https://twitter.com/keakrofficial" class="small-txt decoration-none">Twitter</a>
-          <a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/channel/UCzO1dSfNiUKgm11cCHibppg" class="small-txt decoration-none">Youtube</a>
+          <a target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/42Matcha" class="small-txt decoration-none" >Facebook</a>
+          <a target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/42matcha/" class="small-txt decoration-none" >Instagram</a>
+          <a target="_blank" rel="noopener noreferrer" href="https://twitter.com/42Matcha" class="small-txt decoration-none">Twitter</a>
+          <a target="_blank" rel="noopener noreferrer" href="https://www.youtube.com/@42Matcha" class="small-txt decoration-none">Youtube</a>
         </div>
       </div>
       <div class="divider" />
       <div class="bottom-container">
-        <v-list-item class="middle-side medium-txt decoration-none">
-          <p>Legal notice</p>
+        <v-list-item Align=Center class="middle-side medium-txt decoration-none">
+          <p>Bhamdi & Mbouzae<br/>Vous présentent</p>
           <p>{{ 'MATCHA ©' + ' ' + new Date().getFullYear() }}</p>
         </v-list-item>
       </div>

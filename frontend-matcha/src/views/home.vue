@@ -21,9 +21,9 @@ export default {
 
 <style scoped>
 /* Remove the styles for .HomePage */
-h1 {
+/* h1 {
   font-weight: normal;
   color: #ffffff;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
+} */
 </style>

@@ -5,7 +5,7 @@
     <Dialog v-model:visible="dialog" :maximizable="false" :closable="false" :style="{width: '30vw'}">
       <template v-slot:header>
         <div class="p-d-flex p-ai-center p-jc-between">
-          <h5>{{ registerTitle() }}</h5>
+          <h5>{{ registerUser() }}</h5>
           <Button icon="pi pi-times" class="p-button-rounded p-button-text" @click="dialog = false" />
         </div>
       </template>
@@ -28,7 +28,7 @@
           </div>
         </div>
         <div class="p-d-flex p-jc-end p-pt-3">
-          <a href="#" @click.prevent="trouble">Trouble Logging In?</a>
+          <a href="#" @click.prevent="forgetPassword">Trouble Logging In?</a>
         </div>
       </template>
       <template v-else-if="status == 'recover'">
@@ -434,7 +434,13 @@ export default defineComponent({
         this.text = error.message;
       }
     },
-    async forget_Password() {
+    async forget_Password() {runtime-core.esm-bundler.js?d2dd:40 [Vue warn]: Property "registerTitle" was accessed during render but is not defined on instance. 
+  at <BaseTransition onBeforeEnter=fn<onBeforeEnter> onEnter=fn onBeforeLeave=fn<bound onBeforeLeave>  ... > 
+  at <Transition name="p-dialog" onBeforeEnter=fn<bound onBeforeEnter> onEnter=fn<bound onEnter>  ... > 
+  at <Portal appendTo="body" > 
+  at <Dialog visible=true onUpdate:visible=fn maximizable=false  ... > 
+  at <ModalLogin> 
+  at <App>
       try {
         const response = await forgetUserPassword(this.forget);
         this.snackbar = true;

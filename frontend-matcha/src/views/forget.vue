@@ -27,7 +27,7 @@
           </v-card-text>
         </v-card>
       </v-dialog>
-    <Background />
+    <!-- <Background /> -->
     <FooterApp />
   </v-app>
 </template>
@@ -36,7 +36,7 @@
 import { ref, reactive, watch } from "vue";
 import NavbarApp from "@/components/website/NavbarApp";
 import FooterApp from "@/components/website/FooterApp";
-import Background from "@/components/website/Background";
+// import Background from "@/components/website/Background";
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import { getProfileCompletion } from "@/api";
@@ -47,7 +47,7 @@ export default {
   created() {
     console.log("Je suis dans le composant @/views/forget.vue");
   },
-  components: { NavbarApp, FooterApp, Background/*, EditPasswordApp*/ },
+  components: { NavbarApp, FooterApp, /*Background, EditPasswordApp*/ },
   setup() {
     const store = useStore();
     const router = useRouter();
