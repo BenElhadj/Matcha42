@@ -38,7 +38,7 @@
             <InputText id="email" v-model="forget.email" />
           </div>
           <div class="p-pt-2">
-            <Button label="RECOVER ACCOUNT" @click="forgetUserPassword" />
+            <Button label="RECOVER ACCOUNT" @click="forgetPassword" />
           </div>
         </div>
       </template>
@@ -148,6 +148,11 @@ export default {
         const response = await loginUser(this.login);
         this.snackbar = true;
         this.text = response.msg;
+        const { token, uid } = response
+        this.$cookies.set("token", token, {});
+        this.SetToken(token);
+        this.$store.commit("setUID", uid);
+        this.$router.push("/profile");
       } catch (error) {
         console.error("Error in loginUser:", error);
       }
