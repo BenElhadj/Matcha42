@@ -57,7 +57,7 @@ export default {
 
 <style scoped>
 
-.small-txt {
+/* .small-txt {
   font-size: 12px;
   padding-bottom: 10px;
 }
@@ -135,55 +135,19 @@ export default {
   text-underline-offset: 4px;
 }
 
-.back-to-top {
-  cursor: pointer;
-  /* right: -141px; */
-  position: absolute;
-  width: 120px;
-  bottom: 32px;
-}
-
 .is-not-highlighted {
   font-family: 'Raleway';
 }
 
 .lang {
   cursor: pointer;
-}
-
-@media screen and (max-width: 1372px) {
-  .left-container {
-    margin-bottom: 20px;
-  }
-}
-
-@media screen and (max-width: 1492px) {
-  .back-to-top {
-    right: -95px;
-    bottom: 121px;
-  }
-}
-
-@media screen and (max-width: 1372px) {
-  .back-to-top {
-    right: -33px;
-    bottom: 207px;
-  }
-}
-
-@media screen and (max-width: 597px) {
-  .back-to-top {
-    bottom: 115px;
-  }
-}
+} */
 
 .back-to-top {
   cursor: pointer;
-  right: -141px;
+  right: 0px;
   position: absolute;
-  font-size: 2rem; /* Ajoutez la taille de l'icône */
-  color: #ffffff; /* Définissez la couleur de l'icône */
-  bottom: 32px;
+  bottom: 27px;
 }
 
 </style>
