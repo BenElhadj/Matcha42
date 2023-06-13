@@ -1,8 +1,7 @@
-// import db from '../../database/firebase.js';
 import initializeFirebase from '../../database/firebase.js';
-const { db } = await initializeFirebase();
 import express from 'express';
 const router = express.Router();
+const { db } = await initializeFirebase();
 
 const checkTmp = async (req) => {
   const { tmp } = req.body;
@@ -100,9 +99,8 @@ router.post("/users", async (req, res) => {
 
     res.send(result);
   } else {
-    res.send
-        ("Logout");
-    }
+    res.send("Logout");
+  }
 });
 
 function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {

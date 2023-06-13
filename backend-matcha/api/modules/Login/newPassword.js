@@ -1,9 +1,9 @@
-// import db from '../../database/firebase.js';
-import initializeFirebase from '../../database/firebase.js';
-const { db } = await initializeFirebase();
 import express from 'express';
+import initializeFirebase from '../../database/firebase.js';
 import bcrypt from 'bcrypt';
+
 const router = express.Router();
+const { db } = await initializeFirebase();
 
 router.post("/newPassword", async (req, res) => {
   const { password, token } = req.body;

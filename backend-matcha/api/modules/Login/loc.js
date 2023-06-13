@@ -1,25 +1,24 @@
-// import db from '../../database/firebase.js';
-import initializeFirebase from '../../database/firebase.js';
-const { db } = await initializeFirebase();
 import express from 'express';
+import initializeFirebase from '../../database/firebase.js';
+
 const router = express.Router();
+const { db } = await initializeFirebase();
 
-const checktmp = async (req) =>
-  new Promise(async (res, rej) => {
-    const { tmp } = req.body;
-    const snapshot = await db.collection("User").where("tmp", "==", tmp).get();
+const checktmp = async (req) => {
+  const { tmp } = req.body;
+  const snapshot = await db.collection("User").where("tmp", "==", tmp).get();
 
-    if (!snapshot.empty) {
-      res("True");
-    } else {
-      res("False");
-    }
-  });
+  if (!snapshot.empty) {
+    return "True";
+  } else {
+    return "False";
+  }
+};
 
-/////////// Localisation ///////////////
 router.post("/loc", async (req, res) => {
-  const { lat, lng, addresse, tmp } = req.body;
+  const { lat, lng, adresse, tmp } = req.body;
   let checked = await checktmp(req);
+
   if (checked == "True") {
     const snapshot = await db.collection("User").where("tmp", "==", tmp).get();
     const userDoc = snapshot.docs[0];
@@ -27,7 +26,7 @@ router.post("/loc", async (req, res) => {
     userDoc.ref.update({
       lat: lat,
       lng: lng,
-      addresse: addresse,
+      adresse: adresse,
     });
   } else {
     let obj = "Logout";

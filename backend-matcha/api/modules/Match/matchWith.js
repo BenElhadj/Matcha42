@@ -1,8 +1,8 @@
-// import db from '../../database/firebase.js';
 import initializeFirebase from '../../database/firebase.js';
-const { db } = await initializeFirebase();
 import express from 'express';
+
 const router = express.Router();
+const { db } = await initializeFirebase();
 
 const checkTmp = async (req) => {
   const { tmp } = req.body;
@@ -25,7 +25,7 @@ const getUsersToMatch = async (req) => {
   const usersSnapshot = sexualPref === "All" ? await db.collection("Info").get() : await db.collection("Info").where("gender", "==", sexualPref).get();
 
   for (const userDoc of usersSnapshot.docs) {
-    const userId = userDoc.data().user_id;
+    const userId = userDoc.id;
     if (userId !== id) {
       const blockedSnapshot1 = await db
         .collection("Block")
@@ -60,7 +60,22 @@ const getUsersToMatch = async (req) => {
   return usersToMatch;
 };
 
-// ... (getDistanceFromLatLonInKm and deg2rad functions remain the same)
+const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
+  const R = 6371; // Radius of the earth in km
+  const dLat = deg2rad(lat2 - lat1); // deg2rad below
+  const dLon = deg2rad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const d = R * c;
+  return d;
+};
+
+const deg2rad = (deg) => {
+  return deg * (Math.PI / 180);
+};
 
 router.post("/matchWith", async (req, res) => {
   const { tmp, rangeAge, rangeLoc, tag, rangeFame } = req.body;
@@ -127,4 +142,3 @@ router.post("/matchWith", async (req, res) => {
   });
   
   export default router;
-  

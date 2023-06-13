@@ -1,47 +1,43 @@
-// import db from '../../database/firebase.js';
-import initializeFirebase from '../../database/firebase.js';
-const { db } = await initializeFirebase();
 import express from 'express';
+import initializeFirebase from '../../database/firebase.js';
+
 const router = express.Router();
+const { db } = await initializeFirebase();
 
-const checktmp = async (req) =>
-  new Promise(async (resolve, reject) => {
-    const { tmp } = req.body;
-    const snapshot = await db.collection("User").where("tmp", "==", tmp).get();
+const checktmp = async (req) => {
+  const { tmp } = req.body;
+  const snapshot = await db.collection("User").where("tmp", "==", tmp).get();
 
-    if (!snapshot.empty) {
-      let result = "True";
-      resolve(result);
-    } else {
-      let result = "False";
-      resolve(result);
-    }
+  if (!snapshot.empty) {
+    let result = "True";
+    return result;
+  } else {
+    let result = "False";
+    return result;
+  }
+};
+
+const getTab = async (req) => {
+  const { tmp } = req.body;
+  const userSnapshot = await db
+    .collection("User")
+    .where("tmp", "==", tmp)
+    .get();
+  const userId = userSnapshot.docs[0].id;
+  const historySnapshot = await db
+    .collection("History")
+    .where("user_id", "==", userId)
+    .get();
+  const data = historySnapshot.docs.map((doc) => {
+    return { id: doc.id, ...doc.data() };
   });
-
-const getTab = async (req) =>
-  new Promise(async (resolve, reject) => {
-    const { tmp } = req.body;
-    const userSnapshot = await db
-      .collection("User")
-      .where("tmp", "==", tmp)
-      .get();
-    const userId = userSnapshot.docs[0].id;
-
-    const historySnapshot = await db
-      .collection("History")
-      .where("user_id", "==", userId)
-      .get();
-
-    const data = historySnapshot.docs.map((doc) => {
-      return { id: doc.id, ...doc.data() };
-    });
-
-    resolve(data);
-  });
+  return data;
+};
 
 router.post("/historyData", async (req, res) => {
   const { tmp } = req.body;
   let checked = await checktmp(req);
+
   if (checked == "True") {
     const tab = await getTab(req);
     let obj = [];

@@ -1,22 +1,20 @@
-// import db from '../../database/firebase.js';
-import initializeFirebase from '../../database/firebase.js';
-const { db } = await initializeFirebase();
 import express from 'express';
+import initializeFirebase from '../../database/firebase.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-const router = express.Router();
 
-// Verify Token
+const router = express.Router();
+const { db } = await initializeFirebase();
+
 function verifyToken(req, res, next) {
   const bearerHeader = req.headers["authorization"];
-
   if (typeof bearerHeader !== "undefined") {
     const bearer = bearerHeader.split(" ");
     const bearerToken = bearer[1];
     req.token = bearerToken;
     next();
   } else {
-    res.sendStatus(403); // Forbidden
+    res.sendStatus(403);
   }
 }
 
@@ -26,16 +24,7 @@ async function checkUser(username, password, res) {
   if (!snapshot.empty) {
     const userData = snapshot.docs[0].data();
     const docId = snapshot.docs[0].id;
-    const {
-      firstName,
-      lastName,
-      user,
-      email,
-      pic,
-      completed,
-      password: hash,
-      valid,
-    } = userData;
+    const { firstName, lastName, user, email, pic, completed, password: hash, valid } = userData;
 
     const isPasswordCorrect = await bcrypt.compare(password, hash);
 
@@ -44,7 +33,6 @@ async function checkUser(username, password, res) {
         jwt.sign({ username: username }, "asalah", async (err, token) => {
           const tmp = token;
           await db.collection("User").doc(docId).update({ tmp });
-
           res.json({
             token,
             id: docId,
@@ -60,7 +48,7 @@ async function checkUser(username, password, res) {
         res.send({ msg: "Please verify your email address" });
       }
     } else {
-      res.send({ msg: "Invalid Password" });
+      res.send({ msg: "Invalid password" });
     }
   } else {
     res.send({ msg: "Invalid username" });
@@ -79,6 +67,7 @@ router.post("/posts", verifyToken, (req, res) => {
 
 router.post("/login", (req, res) => {
   const { username, password } = req.body;
+
   if (username !== undefined && password !== undefined) {
     if (typeof username === "string" && typeof password === "string") {
       checkUser(username, password, res);

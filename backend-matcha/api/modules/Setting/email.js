@@ -1,21 +1,19 @@
-// import db from '../../database/firebase.js';
 import initializeFirebase from '../../database/firebase.js';
-const { db } = await initializeFirebase();
 import express from 'express';
 import bcrypt from 'bcrypt';
 const router = express.Router();
+const { db } = await initializeFirebase();
 
-
-const checktmp = async (req) => new Promise(async (res, rej) => {
+const checktmp = async (req) => {
   const { tmp } = req.body;
   const userSnap = await db.collection("User").where("tmp", "==", tmp).get();
 
   if (!userSnap.empty) {
-    res("True");
+    return "True";
   } else {
-    res("False");
+    return "False";
   }
-});
+};
 
 router.post("/email", async (req, res) => {
   const { email, password, tmp } = req.body;

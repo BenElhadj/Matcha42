@@ -1,29 +1,27 @@
-// import db from '../../database/firebase.js';
 import initializeFirebase from '../../database/firebase.js';
-const { db } = await initializeFirebase();
 import express from 'express';
 const router = express.Router();
+const { db } = await initializeFirebase();
 
-
-const checktmp = async (req) => new Promise(async (res, rej) => {
+const checktmp = async (req) => {
   const { tmp } = req.body;
   const userSnap = await db.collection("User").where("tmp", "==", tmp).get();
 
   if (!userSnap.empty) {
-    res("True");
+    return "True";
   } else {
-    res("False");
+    return "False";
   }
-});
+};
 
-const getTab = async (req) => new Promise(async (res, rej) => {
+const getTab = async (req) => {
   const { tmp } = req.body;
   const userSnap = await db.collection("User").where("tmp", "==", tmp).get();
   const userId = userSnap.docs[0].id;
 
   await db.collection("NumNotif").doc(userId).update({ num: 0 });
-  res("done");
-});
+  return "done";
+};
 
 router.post("/num", async (req, res) => {
   const checked = await checktmp(req);

@@ -1,9 +1,8 @@
 import * as admin from './firebase';
 import serviceAccount from './matcha-42-bhamdi-mbouzaie-firebase-adminsdk-1klu6-dbe995a9d1.json';
 
-// Initialiser Firebase
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+  credential: admin.credential.cert(serviceAccount)
 });
 
 const db = admin.firestore();

@@ -1,5 +1,6 @@
-import db from '../../database/firebase.js';
 import express from 'express';
+import db from '../../database/firebase.js';
+
 const router = express.Router();
 
 function getAge(dateString) {
@@ -7,24 +8,26 @@ function getAge(dateString) {
   var birthDate = new Date(dateString);
   var age = today.getFullYear() - birthDate.getFullYear();
   var m = today.getMonth() - birthDate.getMonth();
+
   if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
     age--;
   }
+
   return age;
 }
 
-const checktmp = async (req) => new Promise(async (resolve, reject) => {
+const checktmp = async (req) => {
   const { tmp } = req.body;
   const snapshot = await db.collection("User").where("tmp", "==", tmp).get();
 
   if (!snapshot.empty) {
     let result = "True";
-    resolve(result);
+    return result;
   } else {
     let result = "False";
-    resolve(result);
+    return result;
   }
-});
+};
 
 router.post("/complete", async (req, res) => {
   const { gender, sexualPref, bio, tags, date, tmp } = req.body;
@@ -33,7 +36,6 @@ router.post("/complete", async (req, res) => {
   if (checked == "True") {
     const userSnapshot = await db.collection("User").where("tmp", "==", tmp).get();
     const userId = userSnapshot.docs[0].id;
-
     const infoSnapshot = await db.collection("Info").where("user_id", "==", userId).get();
 
     if (infoSnapshot.empty) {
@@ -77,7 +79,6 @@ router.post("/complete", async (req, res) => {
 
       const age = getAge(date);
       await db.collection("User").doc(userId).update({ age });
-
       await db.collection("NumNotif").add({
         user_id: userId,
         num: 0,

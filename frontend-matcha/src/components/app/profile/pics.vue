@@ -55,8 +55,9 @@
                   color="primary"
                   class="mt-4"
                   :disabled="!valid"
-                  @click="() => await_pic(n)"
+                  @click="await_pic(n)"
                 >
+
                   <v-icon left>mdi-check-bold</v-icon>SAVE
                 </v-btn>
               </v-col>
@@ -122,7 +123,6 @@ export default {
       text.value = response.res.data.msg;
     };
 
-
     const pic = async (id) => {
         const formData = new FormData();
       formData.append('file', image.value);
@@ -155,7 +155,6 @@ export default {
     };
 
     onMounted(() => {
-      // Do any necessary actions after component is mounted
     });
 
     return {

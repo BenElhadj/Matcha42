@@ -1,21 +1,21 @@
-// import db from '../../database/firebase.js';
-import initializeFirebase from '../../database/firebase.js';
-const { db } = await initializeFirebase();
 import express from 'express';
-const router = express.Router();
+import initializeFirebase from '../../database/firebase.js';
 
-const checktmp = async (req) => new Promise(async (resolve, reject) => {
+const router = express.Router();
+const { db } = await initializeFirebase();
+
+const checktmp = async (req) => {
   const { tmp } = req.body;
   const snapshot = await db.collection("User").where("tmp", "==", tmp).get();
 
   if (!snapshot.empty) {
     let result = "True";
-    resolve(result);
+    return result;
   } else {
     let result = "False";
-    resolve(result);
+    return result;
   }
-});
+};
 
 router.post('/tmp', async (req, res) => {
   const msg = await checktmp(req);

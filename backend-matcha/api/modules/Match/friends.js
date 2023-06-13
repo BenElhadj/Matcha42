@@ -1,7 +1,8 @@
-import db from "../../database/firebase.js";
 import express from 'express';
+import initializeFirebase from '../../database/firebase.js';
 
 const router = express.Router();
+const { db } = await initializeFirebase();
 
 const checkTmp = async (req) => {
   const { tmp } = req.body;
@@ -14,14 +15,11 @@ const getTab = async (req) => {
   const userSnapshot = await db.collection("User").where("tmp", "==", tmp).get();
   const userDoc = userSnapshot.docs[0];
   const id = userDoc.id;
-
   const matchingSnapshot1 = await db.collection("Matching").where("id_user2", "==", id).get();
   const matchingSnapshot2 = await db.collection("Matching").where("id_user1", "==", id).get();
-
   let tab = [];
-  matchingSnapshot1.forEach(matchingDoc => tab.push(matchingDoc.data().id_user1));
-  matchingSnapshot2.forEach(matchingDoc => tab.push(matchingDoc.data().id_user2));
-
+  matchingSnapshot1.forEach((matchingDoc) => tab.push(matchingDoc.data().id_user1));
+  matchingSnapshot2.forEach((matchingDoc) => tab.push(matchingDoc.data().id_user2));
   return tab;
 };
 

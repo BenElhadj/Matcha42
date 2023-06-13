@@ -1,58 +1,69 @@
-// import db from '../../database/firebase.js';
 import initializeFirebase from '../../database/firebase.js';
-const { db } = await initializeFirebase();
 import express from 'express';
 const router = express.Router();
+const { db } = await initializeFirebase();
 
-let checktmp = async (req) => new Promise(async (res, rej) => {
-    const { tmp } = req.body;    
-    let sql = "SELECT * FROM User WHERE tmp = ?";
-    db.query(sql, [tmp], function (err, result)
-    {
-        if (result.length != 0)
-        {
-            let tab = "True"
-            res(tab);
-        }
-        else
-        {
-            let tab = "False"
-            res(tab);
-        }
-    });
-})
+const checkTmp = async (req) => {
+  const { tmp } = req.body;
+  const snapshot = await db.collection("User").where("tmp", "==", tmp).get();
+  return snapshot.size !== 0;
+};
 
-const getTab = async (req) => new Promise(async (res, rej) => {
-    const { tmp, id2 } = req.body;
-    const db = new db();
-    const username = (await db.query(`SELECT * FROM User WHERE tmp = '${tmp}'`))[0].username
-    let msg = `${username} Have Unliked You`
-    const id = (await db.query(`SELECT * FROM User WHERE tmp = '${tmp}'`))[0].id
-    db.query(`DELETE FROM Matching WHERE id_user1 = '${id}' AND id_user2 = '${id2}'`)
-    db.query(`DELETE FROM Matching WHERE id_user2 = '${id}' AND id_user1 = '${id2}'`)
-    let sql = "INSERT INTO Notif (user_id, act) VALUES (?, ?)";
-    db.query(sql, [id2, msg], function(err, result)
-    {});
-    let num = (await db.query(`SELECT num FROM NumNotif WHERE user_id = '${id2}'`))[0].num
-    num++;
-    sql = "UPDATE NumNotif SET num = ? WHERE user_id = ?";
-    db.query(sql, [num, id2], function (err, result) {
-      if (err) throw (err)
+const unlikeUser = async (req) => {
+  const { tmp, id2 } = req.body;
+  const userSnapshot = await db.collection("User").where("tmp", "==", tmp).get();
+  const id = userSnapshot.docs[0].id;
+
+  const matchingSnapshot1 = await db
+    .collection("Matching")
+    .where("id_user1", "==", id)
+    .where("id_user2", "==", id2)
+    .get();
+  const matchingSnapshot2 = await db
+    .collection("Matching")
+    .where("id_user1", "==", id2)
+    .where("id_user2", "==", id)
+    .get();
+
+  if (!matchingSnapshot1.empty) {
+    const matchingDoc = matchingSnapshot1.docs[0];
+    await db.collection("Matching").doc(matchingDoc.id).delete();
+  }
+
+  if (!matchingSnapshot2.empty) {
+    const matchingDoc = matchingSnapshot2.docs[0];
+    await db.collection("Matching").doc(matchingDoc.id).delete();
+  }
+
+  const username = (await db.collection("User").doc(id).get()).data().username;
+  const msg = `${username} Have Unliked You`;
+
+  await db.collection("Notif").add({
+    user_id: id2,
+    act: msg,
+  });
+
+  const numSnapshot = await db.collection("NumNotif").where("user_id", "==", id2).get();
+  if (!numSnapshot.empty) {
+    const numDoc = numSnapshot.docs[0];
+    const num = numDoc.data().num + 1;
+    await db.collection("NumNotif").doc(numDoc.id).update({
+      num: num,
     });
-})
+  }
+
+  return true;
+};
 
 router.post('/unlike', async (req, res) => {
-    let checked = await checktmp(req);
-    if (checked = "True")
-    {
-        await getTab(req);
-        res.send({msg: 'User Unlicked Successfully'});        
-    }
-    else
-    {
-        let obj = "Logout"
-        res.send(obj);
-    } 
-})
+  const isUserValid = await checkTmp(req);
+
+  if (isUserValid) {
+    await unlikeUser(req);
+    res.send({ msg: 'User Unliked Successfully' });
+  } else {
+    res.send("Logout");
+  }
+});
 
 export default router;

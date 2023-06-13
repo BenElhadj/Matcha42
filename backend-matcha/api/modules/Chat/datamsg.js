@@ -1,21 +1,21 @@
-// import db from '../../database/firebase.js';
-import initializeFirebase from '../../database/firebase.js';
-const { db } = await initializeFirebase();
 import express from 'express';
-const router = express.Router();
+import initializeFirebase from '../../database/firebase.js';
 
-const checktmp = async (req) => new Promise(async (res, rej) => {
+const router = express.Router();
+const { db } = await initializeFirebase();
+
+const checktmp = async (req) => {
   const { tmp } = req.body;
   const querySnapshot = await db.collection('User').where('tmp', '==', tmp).get();
 
   if (!querySnapshot.empty) {
-    res("True");
+    return "True";
   } else {
-    res("False");
+    return "False";
   }
-});
+};
 
-const getTab = async (req) => new Promise(async (res, rej) => {
+const getTab = async (req) => {
   const { tmp, id } = req.body;
   const myidSnapshot = await db.collection('User').where('tmp', '==', tmp).get();
   const myid = myidSnapshot.docs[0].id;
@@ -25,10 +25,10 @@ const getTab = async (req) => new Promise(async (res, rej) => {
 
   const data1 = data1Snapshot.docs.map(doc => doc.data());
   const data2 = data2Snapshot.docs.map(doc => doc.data());
-
   const data = [...data1, ...data2];
-  res(data);
-});
+
+  return data;
+};
 
 router.post('/', async (req, res) => {
   const check = await checktmp(req);
@@ -50,6 +50,7 @@ router.post('/', async (req, res) => {
 
       obj.push(data);
     }
+
     res.send(obj);
   } else {
     res.send("Logout");

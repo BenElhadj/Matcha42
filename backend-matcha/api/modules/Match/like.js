@@ -1,7 +1,8 @@
-import db from "../../database/firebase.js";
 import express from 'express';
+import initializeFirebase from '../../database/firebase.js';
 
 const router = express.Router();
+const { db } = await initializeFirebase();
 
 const checkTmp = async (req) => {
   const { tmp } = req.body;
@@ -14,7 +15,7 @@ const getTab = async (req) => {
   const idMatching = (await db.collection("User").where("tmp", "==", tmp).get()).docs[0].id;
   const matchingSnapshot = await db.collection("MatchReq").where("matching", "==", idMatching).where("matched", "==", id).get();
   const score = (await db.collection("Rating").doc(id).get()).data().score;
-  
+
   if (!matchingSnapshot.empty) {
     const matchingDoc = matchingSnapshot.docs[0];
     const idMatchingDoc = matchingDoc.id;

@@ -1,12 +1,13 @@
-// import db from '../../database/firebase.js';
-import initializeFirebase from '../../database/firebase.js';
-const { db } = await initializeFirebase();
 import express from 'express';
+import initializeFirebase from '../../database/firebase.js';
 import nodemailer from 'nodemailer';
+
 const router = express.Router();
+const { db } = await initializeFirebase();
 
 router.post("/forget", async (req, res) => {
   const { email } = req.body;
+
   if (email !== undefined) {
     if (typeof email === "string") {
       const snapshot = await db.collection("User").where("email", "==", email).get();
@@ -17,7 +18,7 @@ router.post("/forget", async (req, res) => {
 
         if (valid == 1) {
           const token = userDoc.data().token;
-          // send mail
+
           const transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
@@ -25,16 +26,19 @@ router.post("/forget", async (req, res) => {
               pass: process.env.EMAIL_PASS,
             },
           });
+
           const mailOptions = {
             from: "Matcha42@gmail.com",
             to: email,
             subject: "Forget Password",
             text: `http://localhost:3000/forget?token=${token}`,
           };
+
           transporter.sendMail(mailOptions, function (error, info) {
             if (error) console.log(error);
           });
-          res.send({ msg: "An email sent to you to reset your password" });
+
+          res.send({ msg: "An email has been sent to you to reset your password" });
         } else {
           res.send({ msg: "Please verify your email address" });
         }

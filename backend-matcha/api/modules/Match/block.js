@@ -1,8 +1,8 @@
-// import db from '../../database/firebase.js';
-import initializeFirebase from '../../database/firebase.js';
-const { db } = await initializeFirebase();
 import express from 'express';
+import initializeFirebase from '../../database/firebase.js';
+
 const router = express.Router();
+const { db } = await initializeFirebase();
 
 const checkTmp = async (req) => {
   const { tmp } = req.body;
@@ -38,6 +38,7 @@ const blockUser = async (req) => {
 
 router.post("/block", async (req, res) => {
   const isUserValid = await checkTmp(req);
+
   if (isUserValid) {
     const msg = await blockUser(req);
     res.send(msg);

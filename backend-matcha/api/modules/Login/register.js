@@ -1,10 +1,10 @@
-// import db from '../../database/firebase.js';
-import initializeFirebase from '../../database/firebase.js';
-const { db } = await initializeFirebase();
 import express from 'express';
+import initializeFirebase from '../../database/firebase.js';
 import bcrypt from 'bcrypt';
 import nodemailer from 'nodemailer';
+
 const router = express.Router();
+const { db } = await initializeFirebase();
 
 router.post("/register", async (req, res) => {
   const { firstName, lastName, username, email, password } = req.body;
@@ -54,8 +54,8 @@ router.post("/register", async (req, res) => {
           const mailOptions = {
             from: "Matcha42@gmail.com",
             to: email,
-            subject: "Email Verfication",
-            text: `<a href='http://localhost:3000/token?token=${token}'>Confirm</a>`,
+            subject: "Email Verification",
+            html: `<a href='http://localhost:3000/token?token=${token}'>Confirm</a>`,
           };
 
           transporter.sendMail(mailOptions, function (error, info) {
@@ -64,10 +64,10 @@ router.post("/register", async (req, res) => {
 
           res.send({ msg: "A verification email has been sent to you" });
         } else {
-          res.send({ msg: "This Email address is already taken. please try another" });
+          res.send({ msg: "This email address is already taken. Please try another one" });
         }
       } else {
-        res.send({ msg: "This Username is already taken. please try another" });
+        res.send({ msg: "This username is already taken. Please try another one" });
       }
     } else {
       return res.send("Invalid input");
