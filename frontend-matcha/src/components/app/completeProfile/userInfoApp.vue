@@ -124,8 +124,8 @@ export default {
     const location = ref(null);
     const gettingLocation = ref(false);
     const errorStr = ref("");
-    const file = ref(null);
-    const error = ref(false);
+    // const file = ref(null);
+    // const error = ref(false);
     const image = ref(null);
     const { cookies } = useCookies(['token']);
 
@@ -171,41 +171,41 @@ export default {
     };
 
     const awaitPic = async function() {
-      await pics();
+      await api.pics();
     };
 
-    const pics = async function() {
-      const formData = new FormData();
-      formData.append("file", image.value);
-      console.log("========================image.value", image.value);
-      const tmp = cookies.get("token");
-      console.log("========================tmp", tmp);
-      const userId = cookies.get("userId");
-      console.log("========================userId", userId);
-      formData.append("tmp", tmp);
-      console.log("========================formData", formData);
-      formData.append("userId", userId);
-      console.log("========================formData", formData);
+    // const pics = async function() {
+    //   const formData = new FormData();
+    //   formData.append("file", image.value);
+    //   console.log("========================image.value", image.value);
+    //   const tmp = cookies.get("token");
+    //   console.log("========================tmp", tmp);
+    //   const userId = cookies.get("userId");
+    //   console.log("========================userId", userId);
+    //   formData.append("tmp", tmp);
+    //   console.log("========================formData", formData);
+    //   formData.append("userId", userId);
+    //   console.log("========================formData", formData);
 
-      try {
-        const res = await api.post("/comp/pic", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        path.value = res.data.path;
-        v.value = "valid";
-        errorStr.value = "File has been uploaded";
-        file.value = null;
-        error.value = false;
-        complete.value.avatar = res.data.path; 
-        console.log("========================image.value", image.value);
-      } catch (err) {
-        errorStr.value = "Something went wrong";
-        console.error(err);
-        error.value = true;
-      }
-    };
+    //   try {
+    //     const res = await api.post("/comp/pic", formData, {
+    //       headers: {
+    //         "Content-Type": "multipart/form-data",
+    //       },
+    //     });
+    //     path.value = res.data.path;
+    //     v.value = "valid";
+    //     errorStr.value = "File has been uploaded";
+    //     file.value = null;
+    //     error.value = false;
+    //     complete.value.avatar = res.data.path; 
+    //     console.log("========================image.value", image.value);
+    //   } catch (err) {
+    //     errorStr.value = "Something went wrong";
+    //     console.error(err);
+    //     error.value = true;
+    //   }
+    // };
 
 
     return {
@@ -232,7 +232,7 @@ export default {
       completed,
       compete,
       awaitPic,
-      pics,
+      // pics,
       image
     };
   },
