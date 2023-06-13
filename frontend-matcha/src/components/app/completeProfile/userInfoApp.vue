@@ -155,7 +155,6 @@ export default {
       }
     };
 
-
     const compete = async function() {
       const tmp = cookies.get("token");
       complete.value.tags = model.value;
@@ -186,7 +185,6 @@ export default {
     //   console.log("========================formData", formData);
     //   formData.append("userId", userId);
     //   console.log("========================formData", formData);
-
     //   try {
     //     const res = await api.post("/comp/pic", formData, {
     //       headers: {
@@ -206,7 +204,6 @@ export default {
     //     error.value = true;
     //   }
     // };
-
 
     return {
       v,
